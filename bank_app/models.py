@@ -15,3 +15,16 @@ class BankAccount(models.Model):
     currency = models.CharField(max_length=3, default='EUR')
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     is_approved = models.BooleanField(default=False)
+
+class DebitCard(models.Model):
+    card_number = models.CharField(max_length=16, unique=True)
+    expiration_date = models.DateField()
+    connected_account = models.OneToOneField(BankAccount, on_delete=models.CASCADE)
+    is_approved = models.BooleanField(default=False)
+
+class DebitCardRequest(models.Model):
+    client = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    monthly_salary = models.DecimalField(max_digits=10, decimal_places=2)
+    is_approved = models.BooleanField(default=False)
+    rejection_reason = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
