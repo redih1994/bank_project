@@ -1,0 +1,1236 @@
+{
+	"info": {
+		"_postman_id": "030bb7fb-6654-47ee-b148-78acc8c8629a",
+		"name": "New Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30095619"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Banker",
+			"item": [
+				{
+					"name": "Banker Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"banker\",\n    \"password\": \"Tirana1!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/token/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"token",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List-clients",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMDU1MDkyLCJpYXQiOjE2OTk5Njg2OTIsImp0aSI6IjY0NTU2NTc0ZmZkMTQ0ODNhNTc4ZTExYWE4NmZmMzA2IiwidXNlcl9pZCI6Mn0.oDHSdFk_l8BDcC6JmeB4jIYIYNrjGvEVWfKJqXejMd0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk5OTE3MjIxLCJpYXQiOjE2OTk5MTY5MjEsImp0aSI6ImFmYzMzZjE5ZjllNjQwNjBhZDlhYTRlZmMxMmM1YmEzIiwidXNlcl9pZCI6MX0.B9f9nyiTgqp4_dULfzxBArrYNZFtPcJ_vLCPbL8yvkU",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/banker/list-clients/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"banker",
+								"list-clients",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get-client",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMDU1MDkyLCJpYXQiOjE2OTk5Njg2OTIsImp0aSI6IjY0NTU2NTc0ZmZkMTQ0ODNhNTc4ZTExYWE4NmZmMzA2IiwidXNlcl9pZCI6Mn0.oDHSdFk_l8BDcC6JmeB4jIYIYNrjGvEVWfKJqXejMd0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/banker/client/3/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"banker",
+								"client",
+								"3",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create client",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMDU5ODE5LCJpYXQiOjE2OTk5NzM0MTksImp0aSI6ImRjYmZmNDljMjExNTQzMGZhNjUzMThkNGEwMTYzNjU3IiwidXNlcl9pZCI6Mn0.EGvfJwwJdmpwMwGZMIsBg4kpHkpv-SYP9HG3JFql0gA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"new_client_username\",\n    \"password\": \"new_client_password\",\n    \"email\": \"new_client_email@example.com\",\n    \"is_client\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/banker/client/create/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"banker",
+								"client",
+								"create",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update-client",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMDU1MDkyLCJpYXQiOjE2OTk5Njg2OTIsImp0aSI6IjY0NTU2NTc0ZmZkMTQ0ODNhNTc4ZTExYWE4NmZmMzA2IiwidXNlcl9pZCI6Mn0.oDHSdFk_l8BDcC6JmeB4jIYIYNrjGvEVWfKJqXejMd0",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"id\":3,\"username\":\"client\",\"email\":\"client1@client.com\",\"is_client\":true}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/banker/client/3/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"banker",
+								"client",
+								"3",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete-client",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjk5OTY4NzYxLCJpYXQiOjE2OTk5Njg0NjEsImp0aSI6IjI4ODY1MTg4MzY5ZDQ1NDJhNzIyZWJjYjQ2ZGYzNjJjIiwidXNlcl9pZCI6Mn0.brvtw5yReXO_fj8A994GzV3qbD6DI7uuxT1bMPG7dj4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/banker/client/4/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"banker",
+								"client",
+								"4",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List bank accounts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMDU5ODE5LCJpYXQiOjE2OTk5NzM0MTksImp0aSI6ImRjYmZmNDljMjExNTQzMGZhNjUzMThkNGEwMTYzNjU3IiwidXNlcl9pZCI6Mn0.EGvfJwwJdmpwMwGZMIsBg4kpHkpv-SYP9HG3JFql0gA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/banker/list-bank-accounts/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"banker",
+								"list-bank-accounts",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get bank account",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMDU5ODE5LCJpYXQiOjE2OTk5NzM0MTksImp0aSI6ImRjYmZmNDljMjExNTQzMGZhNjUzMThkNGEwMTYzNjU3IiwidXNlcl9pZCI6Mn0.EGvfJwwJdmpwMwGZMIsBg4kpHkpv-SYP9HG3JFql0gA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/banker/bank-accounts/1/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"banker",
+								"bank-accounts",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Approve bank request",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMDU5ODE5LCJpYXQiOjE2OTk5NzM0MTksImp0aSI6ImRjYmZmNDljMjExNTQzMGZhNjUzMThkNGEwMTYzNjU3IiwidXNlcl9pZCI6Mn0.EGvfJwwJdmpwMwGZMIsBg4kpHkpv-SYP9HG3JFql0gA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"is_approved\": true\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/banker/bank-accounts/1/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"banker",
+								"bank-accounts",
+								"1",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete bank account",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMDU5ODE5LCJpYXQiOjE2OTk5NzM0MTksImp0aSI6ImRjYmZmNDljMjExNTQzMGZhNjUzMThkNGEwMTYzNjU3IiwidXNlcl9pZCI6Mn0.EGvfJwwJdmpwMwGZMIsBg4kpHkpv-SYP9HG3JFql0gA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/banker/bank-accounts/5/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"banker",
+								"bank-accounts",
+								"5",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List debit card requests",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Review debit card request",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMDc1NTc4LCJpYXQiOjE2OTk5ODkxNzgsImp0aSI6ImE4ZWMyZDIxMjdiMzRjZTlhOWIxNjNlYTlhZWFmODM5IiwidXNlcl9pZCI6Mn0.Mj_37gxiWD5kQLyhs0SrkP5JxKbIJhSCPVT6knBAQQk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"is_approved\": true\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/banker/review-debit-card-request/9/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"banker",
+								"review-debit-card-request",
+								"9",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List debit cards",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "View transactions",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Client",
+			"item": [
+				{
+					"name": "Client Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"client1\",\n    \"password\": \"Tirana1!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/token/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"token",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request bank account",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMDU4Njk5LCJpYXQiOjE2OTk5NzIyOTksImp0aSI6ImUxOTBlYzAwOTY0NjQ4YWZiZjE3OTcyNWI1MTQ3ZGY0IiwidXNlcl9pZCI6NX0.6iIs5lcnZS9VrDuV2od9aTzEYDi9WUsKjhOS6XYFVgc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/client/request-bank-account/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"client",
+								"request-bank-account",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve bank info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMDU4Njk5LCJpYXQiOjE2OTk5NzIyOTksImp0aSI6ImUxOTBlYzAwOTY0NjQ4YWZiZjE3OTcyNWI1MTQ3ZGY0IiwidXNlcl9pZCI6NX0.6iIs5lcnZS9VrDuV2od9aTzEYDi9WUsKjhOS6XYFVgc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/client/retrieve-bank-account/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"client",
+								"retrieve-bank-account",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request debit card",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMDc3NjcxLCJpYXQiOjE2OTk5OTEyNzEsImp0aSI6ImQyODM4ODAyODY5YjRlZjdiNGQwNjE2YzU1NTdlMGVlIiwidXNlcl9pZCI6N30.K0zyeVEXrXqQnwpWgbffo9XPlYrPBT5u1D5ZPylE8rY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"monthly_salary\": 5000}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/client/request-debit-card/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"client",
+								"request-debit-card",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request debit card info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMTI4MDQ5LCJpYXQiOjE3MDAwNDE2NDksImp0aSI6IjU4NzAzY2Y1MmQ4MzQ1YTM5M2I4ZGYxNTQxNjFiYjQxIiwidXNlcl9pZCI6NX0.ar_trA9_J4TJjIEbilgOeYhqnr_nmk9s0ITIyW2tdKc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/client/debit-card-request-info/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"client",
+								"debit-card-request-info",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Debit card info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMTI4MDQ5LCJpYXQiOjE3MDAwNDE2NDksImp0aSI6IjU4NzAzY2Y1MmQ4MzQ1YTM5M2I4ZGYxNTQxNjFiYjQxIiwidXNlcl9pZCI6NX0.ar_trA9_J4TJjIEbilgOeYhqnr_nmk9s0ITIyW2tdKc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/client/debit-cards/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"client",
+								"debit-cards",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Client 3",
+			"item": [
+				{
+					"name": "Client Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"client3\",\n    \"password\": \"Tirana1!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/token/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"token",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request bank account",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMTMyNDU2LCJpYXQiOjE3MDAwNDYwNTYsImp0aSI6IjJhODRlMTc3Y2MxYzQ3M2I5OTZkOTU5ZmZiYzM1NTlhIiwidXNlcl9pZCI6OH0.dejZ2JspMS2mwelDttPiewEHbuWtp7LANVg5dq8SOp8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/client/request-bank-account/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"client",
+								"request-bank-account",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve bank info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMTMyNDU2LCJpYXQiOjE3MDAwNDYwNTYsImp0aSI6IjJhODRlMTc3Y2MxYzQ3M2I5OTZkOTU5ZmZiYzM1NTlhIiwidXNlcl9pZCI6OH0.dejZ2JspMS2mwelDttPiewEHbuWtp7LANVg5dq8SOp8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/client/retrieve-bank-account/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"client",
+								"retrieve-bank-account",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request debit card",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMDc3NjcxLCJpYXQiOjE2OTk5OTEyNzEsImp0aSI6ImQyODM4ODAyODY5YjRlZjdiNGQwNjE2YzU1NTdlMGVlIiwidXNlcl9pZCI6N30.K0zyeVEXrXqQnwpWgbffo9XPlYrPBT5u1D5ZPylE8rY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"monthly_salary\": 5000}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/client/request-debit-card/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"client",
+								"request-debit-card",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request debit card info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMTI4MDQ5LCJpYXQiOjE3MDAwNDE2NDksImp0aSI6IjU4NzAzY2Y1MmQ4MzQ1YTM5M2I4ZGYxNTQxNjFiYjQxIiwidXNlcl9pZCI6NX0.ar_trA9_J4TJjIEbilgOeYhqnr_nmk9s0ITIyW2tdKc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/client/debit-card-request-info/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"client",
+								"debit-card-request-info",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Debit card info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMTI4MDQ5LCJpYXQiOjE3MDAwNDE2NDksImp0aSI6IjU4NzAzY2Y1MmQ4MzQ1YTM5M2I4ZGYxNTQxNjFiYjQxIiwidXNlcl9pZCI6NX0.ar_trA9_J4TJjIEbilgOeYhqnr_nmk9s0ITIyW2tdKc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/client/debit-cards/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"client",
+								"debit-cards",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transfer",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "View Transactions",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Deposit",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Withdraw",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Client 4",
+			"item": [
+				{
+					"name": "Client Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"client3\",\n    \"password\": \"Tirana1!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/token/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"token",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request bank account",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMTMyNDU2LCJpYXQiOjE3MDAwNDYwNTYsImp0aSI6IjJhODRlMTc3Y2MxYzQ3M2I5OTZkOTU5ZmZiYzM1NTlhIiwidXNlcl9pZCI6OH0.dejZ2JspMS2mwelDttPiewEHbuWtp7LANVg5dq8SOp8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/client/request-bank-account/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"client",
+								"request-bank-account",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve bank info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMTMyNDU2LCJpYXQiOjE3MDAwNDYwNTYsImp0aSI6IjJhODRlMTc3Y2MxYzQ3M2I5OTZkOTU5ZmZiYzM1NTlhIiwidXNlcl9pZCI6OH0.dejZ2JspMS2mwelDttPiewEHbuWtp7LANVg5dq8SOp8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/client/retrieve-bank-account/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"client",
+								"retrieve-bank-account",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request debit card",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMDc3NjcxLCJpYXQiOjE2OTk5OTEyNzEsImp0aSI6ImQyODM4ODAyODY5YjRlZjdiNGQwNjE2YzU1NTdlMGVlIiwidXNlcl9pZCI6N30.K0zyeVEXrXqQnwpWgbffo9XPlYrPBT5u1D5ZPylE8rY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"monthly_salary\": 5000}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/client/request-debit-card/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"client",
+								"request-debit-card",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request debit card info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMTI4MDQ5LCJpYXQiOjE3MDAwNDE2NDksImp0aSI6IjU4NzAzY2Y1MmQ4MzQ1YTM5M2I4ZGYxNTQxNjFiYjQxIiwidXNlcl9pZCI6NX0.ar_trA9_J4TJjIEbilgOeYhqnr_nmk9s0ITIyW2tdKc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/client/debit-card-request-info/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"client",
+								"debit-card-request-info",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Debit card info",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMTI4MDQ5LCJpYXQiOjE3MDAwNDE2NDksImp0aSI6IjU4NzAzY2Y1MmQ4MzQ1YTM5M2I4ZGYxNTQxNjFiYjQxIiwidXNlcl9pZCI6NX0.ar_trA9_J4TJjIEbilgOeYhqnr_nmk9s0ITIyW2tdKc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/client/debit-cards/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"client",
+								"debit-cards",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Transfer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzAwMTQ1ODM2LCJpYXQiOjE3MDAwNTk0MzYsImp0aSI6IjI0MmY3OTRmODhlNTQ2YTFhY2Y5NzM2YWRjZWM1MTgyIiwidXNlcl9pZCI6OX0.u60gmcriNVN71PihnbOLp-7dQ9r4acLwhNUgjl_Y1PI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"receiver_iban\": \"IBAN_339de79ef62b\",\n  \"amount\": \"100.00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:9090/api/transactions/create/",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "9090",
+							"path": [
+								"api",
+								"transactions",
+								"create",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "View Transactions",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
