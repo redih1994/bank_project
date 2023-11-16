@@ -13,6 +13,8 @@ from .permissions import IsClientPermission
 import uuid
 from rest_framework import serializers
 from decimal import Decimal
+from django.contrib.auth.hashers import make_password
+from django.db import transaction
 
 
 class BankerListClientsView(generics.ListAPIView):
@@ -30,7 +32,20 @@ class BankerCreateClientView(generics.CreateAPIView):
         serializer.save()
 
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
+        # Include the 'password' field in the data with the plaintext password
+        request_data = request.data.copy()
+        password = request_data.pop('password', None)
+
+        # Ensure the password field is present and not empty
+        if not password:
+            return Response({'error': 'Password field is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Hash the password
+        hashed_password = make_password(password)
+        request_data['password'] = hashed_password
+
+        # Continue with the serializer and creation process
+        serializer = self.get_serializer(data=request_data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
@@ -200,6 +215,7 @@ class BankerListDebitCardRequestsView(generics.ListAPIView):
     serializer_class = DebitCardRequestSerializer
     permission_classes = [IsBankerPermission]
 
+
 class BankerListDebitCardsView(generics.ListAPIView):
     queryset = DebitCard.objects.all()
     serializer_class = DebitCardSerializer
@@ -259,24 +275,25 @@ class TransactionCreateView(generics.CreateAPIView):
             if sender_account.balance < float(amount):
                 return Response({"detail": "Insufficient balance in the sender's account."},
                                 status=status.HTTP_400_BAD_REQUEST)
-            sender_account.balance -= Decimal(amount)
-            receiver_account.balance += Decimal(amount)
-            sender_account.save()
-            receiver_account.save()
+            with transaction.atomic():
+                sender_account.balance -= Decimal(amount)
+                receiver_account.balance += Decimal(amount)
+                sender_account.save()
+                receiver_account.save()
             # Perform the transaction
-            Transaction.objects.create(
-                bank_account=sender_account,
-                amount=amount,
-                currency="EUR",
-                transaction_type="DEBIT"
-            )
-            # Create a credit transaction for the receiver's account
-            Transaction.objects.create(
-                bank_account=receiver_account,
-                amount=amount,
-                currency="EUR",
-                transaction_type="CREDIT"
-            )
+                Transaction.objects.create(
+                    bank_account=sender_account,
+                    amount=amount,
+                    currency="EUR",
+                    transaction_type="DEBIT"
+                )
+                # Create a credit transaction for the receiver's account
+                Transaction.objects.create(
+                    bank_account=receiver_account,
+                    amount=amount,
+                    currency="EUR",
+                    transaction_type="CREDIT"
+                )
             # Update the sender's account balance
 
             return Response({"The Transaction is successful"}, status=status.HTTP_201_CREATED)
@@ -391,5 +408,3 @@ class DepositCreateView(generics.CreateAPIView):
 
         except BankAccount.DoesNotExist:
             return Response({"detail": "Invalid bank account."}, status=status.HTTP_400_BAD_REQUEST)
-
-
