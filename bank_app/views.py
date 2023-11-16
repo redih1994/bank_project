@@ -6,17 +6,20 @@ from rest_framework.permissions import IsAuthenticated
 from .models import CustomUser
 from .serializers import CustomUserSerializer
 from .permissions import IsBankerPermission
-from .models import BankAccount, DebitCard, DebitCardRequest
-from .serializers import BankAccountRequestSerializer, BankAccountSerializer, DebitCardSerializer, DebitCardRequestSerializer
+from .models import BankAccount, DebitCard, DebitCardRequest, Transaction
+from .serializers import BankAccountRequestSerializer, BankAccountSerializer, DebitCardSerializer, \
+    DebitCardRequestSerializer, TransactionSerializer
 from .permissions import IsClientPermission
 import uuid
 from rest_framework import serializers
+from decimal import Decimal
 
 
 class BankerListClientsView(generics.ListAPIView):
     queryset = CustomUser.objects.filter(is_client=True)
     serializer_class = CustomUserSerializer
     permission_classes = [IsBankerPermission]
+
 
 class BankerCreateClientView(generics.CreateAPIView):
     queryset = CustomUser.objects.filter(is_client=True)
@@ -32,6 +35,7 @@ class BankerCreateClientView(generics.CreateAPIView):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
 
 class BankerRetrieveUpdateDestroyClientView(generics.RetrieveUpdateDestroyAPIView):
     queryset = CustomUser.objects.filter(is_client=True)
@@ -61,24 +65,30 @@ class BankerRetrieveUpdateDestroyClientView(generics.RetrieveUpdateDestroyAPIVie
     def perform_destroy(self, instance):
         instance.delete()
 
+
 class ClientRequestBankAccountView(generics.CreateAPIView):
     queryset = BankAccount.objects.all()
     serializer_class = BankAccountRequestSerializer
     permission_classes = [IsClientPermission]
 
     def perform_create(self, serializer):
+        existing_account = BankAccount.objects.filter(user=self.request.user)
+
+        if existing_account:
+            raise serializers.ValidationError("You already have a bank account.")
 
         account_id = generate_unique_account_id()
         iban = generate_unique_iban()
 
         serializer.save(user=self.request.user, account_id=account_id, iban=iban)
         return Response({'detail': 'Bank account request submitted for approval.'}, status=status.HTTP_201_CREATED)
-def generate_unique_account_id():
 
+
+def generate_unique_account_id():
     return 'ACCT_' + str(uuid.uuid4().hex)[:8]
 
-def generate_unique_iban():
 
+def generate_unique_iban():
     return 'IBAN_' + str(uuid.uuid4().hex)[:12]
 
 
@@ -88,6 +98,7 @@ class ClientRetrieveBankAccountView(generics.RetrieveAPIView):
 
     def get_object(self):
         return BankAccount.objects.get(user=self.request.user)
+
 
 class BankerListBankAccountsView(generics.ListAPIView):
     queryset = BankAccount.objects.all()
@@ -104,8 +115,8 @@ class BankerRetrieveUpdateDestroyBankAccountView(generics.RetrieveUpdateDestroyA
         serializer.save(is_approved=True)
 
     def delete(self, request, *args, **kwargs):
-        # Optionally, you can add custom logic for delete, e.g., archive instead of hard delete
         return self.destroy(request, *args, **kwargs)
+
 
 class ClientRequestDebitCardView(generics.CreateAPIView):
     queryset = DebitCardRequest.objects.all()
@@ -138,6 +149,7 @@ class ClientRequestDebitCardView(generics.CreateAPIView):
 
         return Response({'detail': 'Debit card request submitted for approval.'}, status=status.HTTP_201_CREATED)
 
+
 class ClientDebitCardRequestInfo(generics.ListAPIView):
     serializer_class = DebitCardRequestSerializer
     permission_classes = [IsClientPermission]
@@ -146,6 +158,7 @@ class ClientDebitCardRequestInfo(generics.ListAPIView):
         # Retrieve the debit card requests for the authenticated client
         client = self.request.user
         return DebitCardRequest.objects.filter(client=client)
+
 
 class BankerReviewDebitCardRequestView(generics.RetrieveUpdateAPIView):
     queryset = DebitCardRequest.objects.all()
@@ -173,16 +186,25 @@ class BankerReviewDebitCardRequestView(generics.RetrieveUpdateAPIView):
 
         serializer.save()
 
+
 def generate_unique_card_number():
     return 'CARD_' + str(uuid.uuid4().hex)[:10]
 
+
 def calculate_expiration_date():
     return timezone.now() + timedelta(days=365)
+
 
 class BankerListDebitCardRequestsView(generics.ListAPIView):
     queryset = DebitCardRequest.objects.filter(is_approved=False)
     serializer_class = DebitCardRequestSerializer
     permission_classes = [IsBankerPermission]
+
+class BankerListDebitCardsView(generics.ListAPIView):
+    queryset = DebitCard.objects.all()
+    serializer_class = DebitCardSerializer
+    permission_classes = [IsBankerPermission]
+
 
 class ClientDebitCardView(generics.ListAPIView):
     serializer_class = DebitCardSerializer
@@ -202,3 +224,172 @@ class ClientDebitCardView(generics.ListAPIView):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class TransactionCreateView(generics.CreateAPIView):
+    serializer_class = TransactionSerializer
+    permission_classes = [IsClientPermission]
+
+    def create(self, request, *args, **kwargs):
+        # Retrieve the authenticated client
+        client = request.user
+
+        # Retrieve request data
+        receiver_iban = request.data.get('receiver_iban', None)
+        amount = request.data.get('amount', None)
+
+        # Validate request data
+        if not receiver_iban or not amount:
+            return Response({"detail": "Receiver IBAN and amount are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Retrieve sender's bank account
+            sender_account = BankAccount.objects.get(user=client)
+            if not DebitCard.objects.filter(connected_account=sender_account, is_approved=True).exists():
+                return Response({"detail": "You must have an approved debit card to perform a transaction."},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+            # Retrieve receiver's bank account
+            receiver_account = BankAccount.objects.get(iban=receiver_iban)
+            if not DebitCard.objects.filter(connected_account=receiver_account, is_approved=True).exists():
+                return Response({"detail": "The receiver must have an approved debit card to perform a transaction."},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+            # Check if there's enough balance in the sender's account
+            if sender_account.balance < float(amount):
+                return Response({"detail": "Insufficient balance in the sender's account."},
+                                status=status.HTTP_400_BAD_REQUEST)
+            sender_account.balance -= Decimal(amount)
+            receiver_account.balance += Decimal(amount)
+            sender_account.save()
+            receiver_account.save()
+            # Perform the transaction
+            Transaction.objects.create(
+                bank_account=sender_account,
+                amount=amount,
+                currency="EUR",
+                transaction_type="DEBIT"
+            )
+            # Create a credit transaction for the receiver's account
+            Transaction.objects.create(
+                bank_account=receiver_account,
+                amount=amount,
+                currency="EUR",
+                transaction_type="CREDIT"
+            )
+            # Update the sender's account balance
+
+            return Response({"The Transaction is successful"}, status=status.HTTP_201_CREATED)
+
+        except BankAccount.DoesNotExist:
+            return Response({"detail": "Invalid receiver IBAN."}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ClientTransactionListView(generics.ListAPIView):
+    serializer_class = TransactionSerializer
+    permission_classes = [IsClientPermission]
+
+    def get_queryset(self):
+        # Retrieve the authenticated client
+        client = self.request.user
+
+        # Retrieve transactions for the authenticated client
+        return Transaction.objects.filter(bank_account__user=client)
+
+
+class BankerTransactionListView(generics.ListAPIView):
+    serializer_class = TransactionSerializer
+    permission_classes = [IsBankerPermission]
+
+    def get_queryset(self):
+        # Retrieve all transactions for the banker
+        return Transaction.objects.all()
+
+
+class WithdrawalCreateView(generics.CreateAPIView):
+    serializer_class = TransactionSerializer
+    permission_classes = [IsClientPermission]
+
+    def create(self, request, *args, **kwargs):
+        # Retrieve the authenticated client
+        client = request.user
+
+        # Retrieve request data
+        amount = request.data.get('amount', None)
+
+        # Validate request data
+        if not amount:
+            return Response({"detail": "Amount is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Retrieve sender's bank account
+            sender_account = BankAccount.objects.get(user=client)
+
+            # Check if the sender has a debit card
+            if not DebitCard.objects.filter(connected_account=sender_account, is_approved=True).exists():
+                return Response({"detail": "You must have an approved debit card to perform a withdrawal."},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+            # Check if there's enough balance in the sender's account
+            if sender_account.balance < float(amount):
+                return Response({"detail": "Insufficient balance in the sender's account."},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+            sender_account.balance -= Decimal(amount)
+            sender_account.save()
+
+            # Perform the withdrawal transaction
+            Transaction.objects.create(
+                bank_account=sender_account,
+                amount=amount,
+                currency="EUR",
+                transaction_type="DEBIT",
+            )
+
+            return Response({"detail": "Withdrawal is successful"}, status=status.HTTP_201_CREATED)
+
+        except BankAccount.DoesNotExist:
+            return Response({"detail": "Invalid bank account."}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DepositCreateView(generics.CreateAPIView):
+    serializer_class = TransactionSerializer
+    permission_classes = [IsClientPermission]
+
+    def create(self, request, *args, **kwargs):
+        # Retrieve the authenticated client
+        client = request.user
+
+        # Retrieve request data
+        amount = request.data.get('amount', None)
+
+        # Validate request data
+        if not amount:
+            return Response({"detail": "Amount is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Retrieve sender's bank account
+            sender_account = BankAccount.objects.get(user=client)
+
+            # Check if the sender has a debit card
+            if not DebitCard.objects.filter(connected_account=sender_account, is_approved=True).exists():
+                return Response({"detail": "You must have an approved debit card to perform a deposit."},
+                                status=status.HTTP_400_BAD_REQUEST)
+
+            sender_account.balance += Decimal(amount)
+            sender_account.save()
+
+            # Perform the deposit transaction
+            Transaction.objects.create(
+                bank_account=sender_account,
+                amount=amount,
+                currency="EUR",
+                transaction_type="CREDIT",
+            )
+
+            return Response({"detail": "Deposit is successful"}, status=status.HTTP_201_CREATED)
+
+        except BankAccount.DoesNotExist:
+            return Response({"detail": "Invalid bank account."}, status=status.HTTP_400_BAD_REQUEST)
+
+

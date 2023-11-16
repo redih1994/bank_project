@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import CustomUser
-from .models import BankAccount, DebitCard, DebitCardRequest
+from .models import BankAccount, DebitCard, DebitCardRequest, Transaction
 
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -28,3 +28,9 @@ class DebitCardRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = DebitCardRequest
         fields = ['id', 'monthly_salary', 'is_approved', 'rejection_reason', 'created_at']
+
+class TransactionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Transaction
+        fields = ['bank_account', 'amount', 'currency', 'transaction_type', 'created_at']
+        read_only_fields = ['transaction_id', 'created_at']

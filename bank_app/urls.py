@@ -1,4 +1,3 @@
-# yourappname/urls.py
 from django.urls import path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .views import (
@@ -13,7 +12,13 @@ from .views import (
     BankerListDebitCardRequestsView,
     BankerReviewDebitCardRequestView,
     ClientDebitCardRequestInfo,
-    ClientDebitCardView
+    ClientDebitCardView,
+    TransactionCreateView,
+    ClientTransactionListView,
+    BankerTransactionListView,
+    WithdrawalCreateView,
+    DepositCreateView,
+    BankerListDebitCardsView
 )
 urlpatterns = [
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
@@ -28,7 +33,13 @@ urlpatterns = [
     path('client/request-debit-card/', ClientRequestDebitCardView.as_view(), name='client-request-debit-card'),
     path('client/debit-card-request-info/', ClientDebitCardRequestInfo.as_view(), name='client-debit-card-requests'),
     path('banker/list-debit-card-requests/', BankerListDebitCardRequestsView.as_view(), name='banker-list-debit-card-requests'),
+    path('banker/list-debit-cards/', BankerListDebitCardsView.as_view(), name='banker-list-debit-cards'),
     path('banker/review-debit-card-request/<int:pk>/', BankerReviewDebitCardRequestView.as_view(), name='banker-review-debit-card-request'),
     path('client/debit-cards/', ClientDebitCardView.as_view(), name='client-debit-cards'),
+    path('transactions/create/', TransactionCreateView.as_view(), name='create-transaction'),
+    path('client/transactions/', ClientTransactionListView.as_view(), name='client-transaction-list'),
+    path('banker/transactions/', BankerTransactionListView.as_view(), name='banker-transaction-list'),
+    path('client/deposit/', DepositCreateView.as_view(), name='deposit'),
+    path('client/withdraw/', WithdrawalCreateView.as_view(), name='withdraw'),
 
 ]
